@@ -27,7 +27,13 @@ after_script:
 #   type: git
 #   repo: git@github.com:seayxu/seayxu.github.io.git # 同步的仓库
 #   branch: master # 同步的分支
-
+cache:
+  directories:
+    - node_modules
+# 指定博客源码分支，因人而异。hexo博客源码托管在独立repo则不用设置此项
+branches:
+  only:
+    - source-code 
 env:
  global:
-   - GH_REF: learn:warriorsworld/warriorsworld.github.io.git
+   - GH_REF: github.com:warriorsworld/warriorsworld.github.io.git
