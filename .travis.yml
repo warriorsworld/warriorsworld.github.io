@@ -13,22 +13,8 @@ script:
   - hexo g
 
 after_script:
-  - cd ./public
-  - git init
-  - git config user.name "warriorsworld"
-  - git config user.email "793588344@qq.com"
-  - git add .
-  - git commit -m "Update blog"
-  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
+  - hexo deploy
 # E: Build LifeCycle
-
-deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GH_TOKEN  # Set in the settings page of your repository, as a secure variable
-  keep-history: true
-  on:
-    branch: source-code
 
 env:
  global:
