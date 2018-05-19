@@ -32,3 +32,12 @@ branches:
 env:
  global:
    - GH_REF: github.com/warriorsworld/warriorsworld.github.io.git
+
+# configure notifications (email, IRC, campfire etc)
+# please update this section to your needs!
+# https://docs.travis-ci.com/user/notifications/
+notifications:
+  email:
+    - 793588344@qq.com
+  on_success: change
+  on_failure: always
