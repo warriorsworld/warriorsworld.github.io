@@ -4,7 +4,7 @@ title: 如何使用git diff命令查看差异
 
 ## 引言
 
-我们知道一个git项目由三个部分组成，工作区(work tree)，暂存区(index area)以及版本库。我们所关注的是文件在这三个部分之间的差别>以及版本库中不同历史提交之间的差别。
+我们知道一个git项目由三个部分组成，工作区(work tree)，暂存区(index area)以及版本库。我们所关注的是文件在这三个部分之间的差别,以及版本库中不同历史提交之间的差别。在实际的工作中对于比较文件差异我们一般会使用编辑器自带的功能或者是安装插件，但是了解一些命令对与学习git也是很有帮助的。
 
 ![例子](./git-diff/gitSketch.png)
 
@@ -14,7 +14,7 @@ title: 如何使用git diff命令查看差异
 3. [`git diff [--options] <commit> [--] [<path>…​]`](#cmd_3)
 4. [`git diff [--options] <commit> <commit> [--] [<path>…​]`](#cmd_4)
 
-### `git diff [--options] [--] [<path>…​]` <span id="cmd_1">工作区文件和暂存区文件差异:</span>
+### 1: `git diff [--options] [--] [<path>…​]` <span id="cmd_1">工作区文件和暂存区文件差异:</span>
 
 该命令是用于比较工作区(work tree)中的文件与暂存区(index/staged area)域快照之间的差异， 也就是修改之后还没有暂存起来的变化内容。
 
@@ -51,7 +51,7 @@ index 4c0ee2d..41e5f3d 100644
  ``` bash
  $ hexo new "My New Post"  
 ```
-### `git diff [--options] --cached [<commit>] [--] [<path>…​]` <span id="cmd_2">暂存区与版本库之间的差异:</span>
+### 2: `git diff [--options] --cached [<commit>] [--] [<path>…​]` <span id="cmd_2">暂存区与版本库之间的差异:</span>
 
 该命令是用于比较暂存区(index/staged area)域快照与版本库之间的差异， 也就是通过<code>git add</code>命令添加进暂存区与版本库之间的差异，如果不加之前提交版本号就是比较与最后一次提交比较的差异，当然还可以添加历史提交版本号以及具体路径或是文件。
 
@@ -70,7 +70,7 @@ index c090297..4c0ee2d 100644
 ```
 我们接着上次的修改执行<code>git diff --cached</code>命令，应该只会比较出之前在第6行添加进暂存区的modified的修改内容。
 
-### `git diff [--options] <commit> [--] [<path>…​]` <span id="cmd_3">工作区(work tree)本库之间的差异:</span>
+### 3: `git diff [--options] <commit> [--] [<path>…​]` <span id="cmd_3">工作区(work tree)本库之间的差异:</span>
 
 这里需要注意的是<code>git diff</code>不添加参数是比较工作区与暂存之间的差异，如果添加具体版本号参数则是比较工作区与版本库中具体版本之间的差异。那么大家想想如果现在我执行该命令与最后一次提交的比较会是什么结果呢？没错，当然就应该包括暂存起来的修改和暂存之后再次修改的总和了。不信我们试试~
 
@@ -94,7 +94,7 @@ index c090297..41e5f3d 100644
  $ hexo new "My New Post"
 ```
 
-### `git diff [--options] <commit> <commit> [--] [<path>…​]` <span id="cmd_4">本库中不同版本之间的差异:</span>
+### 4: `git diff [--options] <commit> <commit> [--] [<path>…​]` <span id="cmd_4">本库中不同版本之间的差异:</span>
 
 版本库会记录着我们每一次的提交历史，当我我们要对比历史两个版本的所有修改或是某个文件或是路径的修改，该命令可以帮到我们。现在接着我们将之前的修改提交到版本库中，然后再在第六行后面添加一个单词'test'，然后执行该命令看看会是什么结果。
 
