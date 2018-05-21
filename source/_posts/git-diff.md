@@ -18,7 +18,7 @@ title: 如何使用git diff命令查看差异
 
 该命令是用于比较工作区(work tree)中的文件与暂存区(index/staged area)域快照之间的差异， 也就是修改之后还没有暂存起来的变化内容。
 
-``` git
+``` bash 查看当前修改状态
 E:\warriorsworld.github.io>git status
 On branch sourceCode
 Changes to be committed:
@@ -35,7 +35,7 @@ Changes not staged for commit:
 
 例如在上面的操作中，先对hello-word文件内第6行增加一个modified英文单词，然后通过<code>git add .</code>将改动增加到暂存区。然后在第7行增加modify单词。然后输入<code>git diff</code>会看到只有最后一次修改没有加入到暂存区的差异。
 
-``` git
+``` bash
 E:\warriorsworld.github.io>git diff
 diff --git a/source/_posts/hello-world.md b/source/_posts/hello-world.md
 index 4c0ee2d..41e5f3d 100644
@@ -55,7 +55,7 @@ index 4c0ee2d..41e5f3d 100644
 
 该命令是用于比较暂存区(index/staged area)域快照与版本库之间的差异， 也就是通过<code>git add</code>命令添加进暂存区与版本库之间的差异，如果不加之前提交版本号就是比较与最后一次提交比较的差异，当然还可以添加历史提交版本号以及具体路径或是文件。
 
-``` git
+``` bash
 E:\warriorsworld.github.io>git diff --cached
 diff --git a/source/_posts/hello-world.md b/source/_posts/hello-world.md
 index c090297..4c0ee2d 100644
@@ -74,7 +74,7 @@ index c090297..4c0ee2d 100644
 
 这里需要注意的是<code>git diff</code>不添加参数是比较工作区与暂存之间的差异，如果添加具体版本号参数则是比较工作区与版本库中具体版本之间的差异。那么大家想想如果现在我执行该命令与最后一次提交的比较会是什么结果呢？没错，当然就应该包括暂存起来的修改和暂存之后再次修改的总和了。不信我们试试~
 
-``` git
+``` bash
 E:\warriorsworld.github.io>git diff b823cb6c4103363ac880c67e9183897e24f366b2
 diff --git a/source/_posts/hello-world.md b/source/_posts/hello-world.md
 index c090297..41e5f3d 100644
@@ -100,7 +100,7 @@ index c090297..41e5f3d 100644
 
 首先我们执行<code>git log --pretty=oneline</code>来查看历史的提交记录，将会按提交时间的进行排列，最后提交的在最上面。
 
-``` git
+``` bash
 E:\warriorsworld.github.io>git log --pretty=oneline
 2465e830e114302198c3ef2542367aa3640e1ab9 (HEAD -> sourceCode) '再添加一个历史版本'
 67ab9471ee50064fa173725c4a73f05e2f6480bd '添加一个历史版本'
@@ -109,7 +109,7 @@ b823cb6c4103363ac880c67e9183897e24f366b2 (origin/sourceCode, master) 测试
 ```
 然后我们通过执行git diff 67ab94 2465e命令进行最后两个提交版本的比较。注意，参数的顺序是第一个参数是倒数第二个提交，第二个版本号是最后一次提交，这样我们才能看到增加了<code>test</code>的结果，如果两个版本号互换位置的话就会得到相反的结果。
 
-``` git
+``` bash
 E:\warriorsworld.github.io>git diff 67ab94 2465e
 diff --git a/source/_posts/hello-world.md b/source/_posts/hello-world.md
 index 41e5f3d..02c119b 100644
