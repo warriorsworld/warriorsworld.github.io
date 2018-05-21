@@ -24,13 +24,13 @@ On branch sourceCode
 Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
-        <span color="#FF1493">modified:   source/_posts/hello-world.md</span>
+        modified:   source/_posts/hello-world.md
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
 
-        <span color="#C0FF3E">modified:   source/_posts/hello-world.md</span>
+        modified:   source/_posts/hello-world.md
 ```
 
 例如在上面的操作中，先对hello-word文件内第6行增加一个modified英文单词，然后通过<code>git add .</code>将改动增加到暂存区。然后在第7行增加modify单词。然后输入<code>git diff</code>会看到只有最后一次修改没有加入到暂存区的差异。
@@ -45,8 +45,8 @@ index 4c0ee2d..41e5f3d 100644
 
  ## Quick Start modified
 
-<span color="#C0FF3E">-### Create a new post</span>
-<span color="#FF1493">+### Create a new post modify</span>
+-### Create a new post
++### Create a new post modify
 
  ``` bash
  $ hexo new "My New Post"  
@@ -65,8 +65,8 @@ index c090297..4c0ee2d 100644
  ---
  Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
 
-<span color="#FF1493">-## Quick Start</span>
-<span color="#C0FF3E">+## Quick Start modified</span>
+-## Quick Start
++## Quick Start modified
 ```
 我们接着上次的修改执行<code>git diff --cached</code>命令，应该只会比较出之前在第6行添加进暂存区的modified的修改内容。
 
@@ -84,11 +84,11 @@ index c090297..41e5f3d 100644
  ---
  Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
 
-<span color="#FF1493">-## Quick Start
-<span color="#C0FF3E">+## Quick Start modified
+-## Quick Start
++## Quick Start modified
 
-<span color="#FF1493">-### Create a new post</span>
-<span color="#C0FF3E">+### Create a new post modify</span>
+-### Create a new post
++### Create a new post modify
 
  ``` bash
  $ hexo new "My New Post"
@@ -119,8 +119,8 @@ index 41e5f3d..02c119b 100644
  ---
  Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
 
-<span color="#FF1493">-## Quick Start modified</span>
-<span color="#C0FF3E">+## Quick Start modified test</span>
+-## Quick Start modified
++## Quick Start modified test
 
  ### Create a new post modify
 ```

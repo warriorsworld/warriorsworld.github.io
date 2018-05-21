@@ -2,7 +2,7 @@
   <h1 itemprop="name">
     <a class="<%= class_name %>" href="<%- url_for(post.link) %>" target="_blank" itemprop="url"><%= post.title %></a>
     <span style="display: block;float: right;font-size: 12px;color: #666" id="busuanzi_container_page_pv">
-      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+      本文总阅读<span id="busuanzi_value_page_pv">0</span>次
     </span>
   </h1>
 <% } else if (post.title){ %>
@@ -10,14 +10,14 @@
     <h1 itemprop="name">
       <a class="<%= class_name %>" href="<%- url_for(post.path) %>"><%= post.title %></a>
       <span style="display: block;float: right;font-size: 12px;color: #666" id="busuanzi_container_page_pv">
-        本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        本文总阅读<span id="busuanzi_value_page_pv">0</span>次
       </span>
     </h1>
   <% } else { %>
     <h1 class="<%= class_name %>" itemprop="name">
       <%= post.title %>
       <span style="display: block;float: right;font-size: 12px;color: #666" id="busuanzi_container_page_pv">
-        本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        本文总阅读<span id="busuanzi_value_page_pv">0</span>次
       </span>
     </h1>
   <% } %>
