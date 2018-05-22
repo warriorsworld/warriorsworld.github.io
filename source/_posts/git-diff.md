@@ -6,7 +6,7 @@ title: 如何使用git diff命令查看差异
 
 我们知道一个git项目由三个部分组成，工作区(work tree)，暂存区(index area)以及版本库。我们所关注的是文件在这三个部分之间的差别,以及版本库中不同历史提交之间的差别。在实际的工作中对于比较文件差异我们一般会使用编辑器自带的功能或者是安装插件，但是了解一些命令对与学习git也是很有帮助的。
 
-![例子](./git-diff/gitSketch.png)
+![git仓库结构图](./git-diff/gitSketch.png)
 
 ### 常用的四个比较命令：
 1. [`git diff [--options] [--] [<path>…​]`](#cmd_1)
@@ -47,9 +47,6 @@ index 4c0ee2d..41e5f3d 100644
 
 -### Create a new post
 +### Create a new post modify
-
- ``` bash
- $ hexo new "My New Post"  
 ```
 ### 2: `git diff [--options] --cached [<commit>] [--] [<path>…​]` <span id="cmd_2">暂存区与版本库之间的差异:</span>
 
@@ -89,9 +86,6 @@ index c090297..41e5f3d 100644
 
 -### Create a new post
 +### Create a new post modify
-
- ``` bash
- $ hexo new "My New Post"
 ```
 
 ### 4: `git diff [--options] <commit> <commit> [--] [<path>…​]` <span id="cmd_4">本库中不同版本之间的差异:</span>
