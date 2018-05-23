@@ -1,5 +1,9 @@
 ---
 title: 如何使用git diff命令查看差异
+date: 2018-05-22 10:28:39
+tags:
+  - git diff
+categories: 版本控制
 ---
 
 ## 引言
