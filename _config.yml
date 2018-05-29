@@ -55,6 +55,7 @@ index_generator:
 # Category & Tag
 default_category: uncategorized
 category_map:
+      node学习: NODEJS
       版本控制: CVS
       博客搭建: BLOG
       地图基础: other
