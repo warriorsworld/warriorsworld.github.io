@@ -14,6 +14,8 @@ categories: 版本控制
 2. [`git remote show origin`](#cmd_2)
 3. [`git remote prune origin`](#cmd_3)
 
+<!--more-->
+
 ### 使用<code>git branch [-a|-r]</code> <span id="cmd_1">命令来查看所有或者远程分支
 
 <code> git branch -a </code>命令可以查看所有的分支列表，包括本地和远端的；<code> git branch -r </code>命令可以查看所有远程的分支列表，不带参数只会返回本地的分支。这里为了演示，我在本地创建了一个分支<code> aaa </code>,然后<code> push </code>到远端。
