@@ -71,7 +71,7 @@ URL: https://github.com/warriorsworld/WeHealth.git
  * [pruned] origin/aaa
 ```
 
-<code> git remote prune </code> 命令必须指定要删除对应远端仓库的名称，这里是origin。这时再去执行<code> git branch -a <code>，分支列表中的<code> aaa </code>分支肯定是不存在了。
+<code> git remote prune </code> 命令必须指定要删除对应远端仓库的名称，这里是origin。这时再去执行<code> git branch -a </code>，分支列表中仓库中记录的远程的<code> remotes/origin/aaa </code>分支肯定是不存在了。
 
 ``` bash
 E:\WeHealth>git branch -a
