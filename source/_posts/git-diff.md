@@ -2,7 +2,7 @@
 title: 如何使用git diff命令查看差异
 date: 2018-05-22 10:28:39
 tags:
-  - git diff
+  - git
 categories: 版本控制
 ---
 
@@ -17,6 +17,8 @@ categories: 版本控制
 2. [`git diff [--options] --cached [<commit>] [--] [<path>…​]`](#cmd_2)
 3. [`git diff [--options] <commit> [--] [<path>…​]`](#cmd_3)
 4. [`git diff [--options] <commit> <commit> [--] [<path>…​]`](#cmd_4)
+
+<!--more-->
 
 ### 1: `git diff [--options] [--] [<path>…​]` <span id="cmd_1">工作区文件和暂存区文件差异:</span>
 

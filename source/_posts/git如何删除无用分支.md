@@ -1,7 +1,7 @@
 ---
 title: git如何删除无用分支
 date: 2018-05-29 15:32:38
-tags: git branch
+tags: git
 categories: 版本控制
 ---
 
