@@ -1,0 +1,15 @@
+<div id="gitComment"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    const gitment = new Gitment({
+        id: 'gitComment',
+        owner: 'warriorsworld',
+        repo: 'warriorsworld.github.io',
+        oauth: {
+            client_id: '9f157940865f0970c340',
+            client_secret: 'b08e4c0c7392b9cf5f0e42de63776814eb0b91ce',
+        }
+    });
+    gitment.render('gitComment')
+</script>
