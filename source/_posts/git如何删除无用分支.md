@@ -16,7 +16,7 @@ categories: 版本控制
 
 <!--more-->
 
-### 使用<code>git branch [-a|-r]</code> <span id="cmd_1">命令来查看所有或者远程分支
+### 使用<code id="cmd_1">git branch [-a|-r]</code>命令来查看所有或者远程分支
 
 <code> git branch -a </code>命令可以查看所有的分支列表，包括本地和远端的；<code> git branch -r </code>命令可以查看所有远程的分支列表，不带参数只会返回本地的分支。这里为了演示，我在本地创建了一个分支<code> aaa </code>,然后<code> push </code>到远端。
 
@@ -44,7 +44,7 @@ E:\WeHealth>git branch -a
   remotes/origin/master
 ```
 
-### 使用<code> git remote show origin </code> <span id="cmd_2">可以查看remote地址，远程分支，还有本地分支与之相对应关系等信息
+### 使用<code id="cmd_2"> git remote show origin </code></span>可以查看remote地址，远程分支，还有本地分支与之相对应关系等信息
 
 ``` bash
 E:\WeHealth>git remote show origin
@@ -62,7 +62,7 @@ E:\WeHealth>git remote show origin
 ```
 这是我们可以看到，刚才在远端删除的aaa分支后面出现了一行提示(use <code> git remote prune </code> to remove)。
 
-### 使用<code>git remote prune</code> <span id="cmd_3">删除那些远程仓库中已经不存在的分支
+### 使用<code id="cmd_3">git remote prune</code></span>删除那些远程仓库中已经不存在的分支
 
 ``` bash
 E:\WeHealth>git remote prune origin

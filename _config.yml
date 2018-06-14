@@ -58,6 +58,7 @@ category_map:
       node学习: NODEJS
       版本控制: CVS
       博客搭建: BLOG
+      持续集成: CI
       地图基础: other
 tag_map:
 
