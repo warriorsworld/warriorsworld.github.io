@@ -14,6 +14,7 @@ categories: 持续集成
 <blockquote style="padding: 16px;background: #EEF0F4;border-left: 8px solid #DDDFE4;">持续集成是一种软件开发实践，即团队开发成员经常集成他们的工作，通常每个成员每天至少集成一次，也就意味着每天可能会发生多次集成。每次集成都通过自动化的构建(包括编译，发布，自动化测试)来验证，从而尽快地发现集成错误。 --- Martin Fowler</blockquote> 
 
 从应用的角度来说，也就是在我们的项目开发中，任何人对代码库的修改，都会触发CI服务器对项目的自动构建，自动运行测试，甚至到最后的测试环境部署。这样做的好处是，随时的发现问题，随时修复，可以让产品快速的迭代，同时还能保证代码质量。常用的持续集成软件有:
+
 - Travis CI：是一个在线托管的CI服务，和github强关联。使用它来持续集成，不需要自己搭建服务器，对开源项目免费，对github的私有项目需有偿使用。
 
 - Jenkins CI：需要自己搭服务器，功能与Travis类似，免费的CI提供商。
@@ -28,8 +29,7 @@ categories: 持续集成
 2. [相关插件的安装](#cmd_2)
 3. [jenkins的相关配置](#cmd_3)
 4. [jenkins与github的webhook的挂载](#cmd_4)
-5. [构建模式的详解](#cmd_5)
-6. [实例项目的集成部署实例](#cmd_6)
+5. [实例项目的集成部署实例](#cmd_6)
 
 <!--more-->
 
@@ -63,3 +63,65 @@ jenkins的安装比简单，我了解的有两种安装方式:
 后就可以进入到jenkins的主页了
 
 ![首页](./使用jenkins实现github接收提交后在远程服务器部署流程/indexPage.png)
+
+### <span id="cmd_2">相关插件的安装</span>
+
+在本次示例场景下主要用到的两个插件分别是
+- Git plugin: 用于jenkins在每一次构建项目时从github拉取代码和一系列更新操作
+
+- GitHub Plugin: 用于jenkins与github之间的通讯
+
+默认在我们安装jenkins使用了安装jenkins推荐的插件安装选项，Git plugin插件就会被安装。如果没有安装，我们可以从 [系统管理] > [管理插件] > [可选插件] 中安装我们需要的相关插件。
+
+![插件管理](./使用jenkins实现github接收提交后在远程服务器部署流程/pluginManage.png)
+
+插件安装好后，我们可以在 [已安装]中找到安装过的插件，并对插件进行管理
+
+![已安装](./使用jenkins实现github接收提交后在远程服务器部署流程/installed.png)
+
+### <span id="cmd_3">jenkins的相关配置</span>
+
+我们为了达到github的行为通知jenkins做出相应的响应，并将打包的代码发布到远程开发环境中，就需要分别对github和远端服务器在jenkins上做相应的配置。
+
+#### 配置jenkins访问github的权限
+
+github plugin 插件安装好后，我们通过 [系统管理] > [系统设置] 找到 Github，对 Github 进行配置。首先填写 API URL，如果我们用的免费版本，填写 https://api.github.com 就好，在认证部分点击 add > jenkins , 在 kind 的中选择 Secret text
+
+![renzheng](./使用jenkins实现github接收提交后在远程服务器部署流程/renzheng.png)
+
+其中 ID 和 Description 可以随意填写， Secret 需要到 github 账户 Settings > Developer settings > Personal access tokens 去生成
+
+![tokenPage](./使用jenkins实现github接收提交后在远程服务器部署流程/tokenPage.png)
+
+在生成 token 的页面填写token描述信息，并勾选相应的权限，如果拿不准，可以全部选择。jenkins 中提示至少需要 admin:repo_hook，repo，以及 repo:status 这三个权限
+
+![generateToken](./使用jenkins实现github接收提交后在远程服务器部署流程/generateToken.png)
+
+token 生成后会返回上一个页面显示，这时必须将生成的 token 保存下来(该token只会在第一次生成显示，刷新页面将会消失，如果没有记住就得重新生成)，填入刚才 Secret 的输入框中。
+
+![newToken](./使用jenkins实现github接收提交后在远程服务器部署流程/newToken.png)
+
+#### 配置远程服务器地址
+
+进入[系统管理] > [系统设置] > Publish over SSH 进行配置，分别填写服务器名称, 远端地址，用户名，以及远端的路径。该远端路径也就是之后代码部署的基础路径。
+
+![已安装](./使用jenkins实现github接收提交后在远程服务器部署流程/server.png)
+
+点击 [Test Configuration] 如果测试通过会有 success 的提示，就说名我们远端服务器和 jenkins 的连接成功了。
+
+### <span id="cmd_4">jenkins与github的webhook的挂载</span>
+
+在上一步github的配置中，点击删除按钮的下面的 [高级] 按钮，勾选 Specify another hook url for GitHub configuration 复选框，下面会出现在github的webhook中需要配置的jenkins的地址。这个地址的作用是当github上有相应的相应，比如push或者pull reques的时候，github以这个地址给jenkins发一个post请求，通知jenkins开始构建。
+
+![webhook地址](./使用jenkins实现github接收提交后在远程服务器部署流程/hookurl.png)
+
+然后在到github相应的仓库在 settings > Hooks 下，将该地址填入相应的位置
+
+![webhook地址](./使用jenkins实现github接收提交后在远程服务器部署流程/hook.png)
+
+然后选择触发的事件类型，这个我们选择 Pushes 和 Pull request
+
+![webhook地址](./使用jenkins实现github接收提交后在远程服务器部署流程/event.png)
+
+
+### <span id="cmd_5">实例项目的集成部署实例</span>
