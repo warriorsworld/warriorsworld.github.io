@@ -29,7 +29,7 @@ categories: 持续集成
 2. [相关插件的安装](#cmd_2)
 3. [jenkins的相关配置](#cmd_3)
 4. [jenkins与github的webhook的挂载](#cmd_4)
-5. [实例项目的集成部署实例](#cmd_6)
+5. [实例项目的集成部署实例](#cmd_5)
 
 <!--more-->
 
@@ -42,7 +42,7 @@ jenkins的安装比简单，我了解的有两种安装方式:
 
 2. 启动方式二: 用tomcat打开，将jenkins.war文件放入tomcat下的webapps目录下；重启tomcat，浏览器输入<code> localhost:8080/jenkins </code>即可访问。
 
-> 使用 war 注意的坑是，不同版本的jenkins对jdk的版本有一定的要求，我开始下载的最新版本的<code> jenkins 2.121.1 </code> 在<code> java7 </code>下就不支持，大家使用的时候注意下。
+<div style="color: red">使用 war 注意的坑是，不同版本的 jenkins 对 jdk 的版本有一定的要求，我开始下载的最新版本的<code> jenkins 2.121.1 </code> 在<code> java7 </code>下就不支持，大家使用的时候注意下</div>
 
 - msi安装包安装: 傻瓜式的下一步点到头就好了，浏览器输入<code> localhost:8080 </code>即可访问。
 
@@ -83,7 +83,7 @@ jenkins的安装比简单，我了解的有两种安装方式:
 
 我们为了达到github的行为通知jenkins做出相应的响应，并将打包的代码发布到远程开发环境中，就需要分别对github和远端服务器在jenkins上做相应的配置。
 
-#### 配置jenkins访问github的权限
+#### 1. 配置jenkins访问github的权限
 
 github plugin 插件安装好后，我们通过 [系统管理] > [系统设置] 找到 Github，对 Github 进行配置。首先填写 API URL，如果我们用的免费版本，填写 https://api.github.com 就好，在认证部分点击 add > jenkins , 在 kind 的中选择 Secret text
 
@@ -101,7 +101,7 @@ token 生成后会返回上一个页面显示，这时必须将生成的 token �
 
 ![newToken](./使用jenkins实现github接收提交后在远程服务器部署流程/newToken.png)
 
-#### 配置远程服务器地址
+#### 2. 配置远程服务器地址
 
 进入[系统管理] > [系统设置] > Publish over SSH 进行配置，分别填写服务器名称, 远端地址，用户名，以及远端的路径。该远端路径也就是之后代码部署的基础路径。
 
@@ -125,3 +125,41 @@ token 生成后会返回上一个页面显示，这时必须将生成的 token �
 
 
 ### <span id="cmd_5">实例项目的集成部署实例</span>
+
+至此，我们对于 jenkins 和 github 的相关配置就完成了，现在我们就来做一个小例子来实践以把，感受一下 jenkins 的便捷和威力
+
+1. 创建一个项目: 在 jenkins 首页点击 [新建] 填入项目名称，选择 [构建一个自由风格的软件项目]并点击 ok
+
+![create地址](./使用jenkins实现github接收提交后在远程服务器部署流程/create.png)
+
+2. 对项目进项配置，首先配置项目的基础信息，包括项目名称，描述，github的仓库地址
+
+![general地址](./使用jenkins实现github接收提交后在远程服务器部署流程/general.png)
+
+其次，配置项目的源码管理，选择 git ,配置仓库地址，构建分支等
+
+![sourceManage地址](./使用jenkins实现github接收提交后在远程服务器部署流程/sourceManage.png)
+
+第三，配置构建触发器，选择 GitHub hook trigger for GITScm polling
+
+![handle地址](./使用jenkins实现github接收提交后在远程服务器部署流程/handle.png)
+
+第四，配置构建环境，选择 Use secret text(s) or file(s)，并在 Bindings 中选择之前添加的 Credential
+
+![env地址](./使用jenkins实现github接收提交后在远程服务器部署流程/env.png)
+
+第五步，添加构建步骤，这里选择 Execute shell 即执行一段脚本，脚本可以在 command 输入框中填写，写可以单独写一个 sh 文件，单独执行。
+
+![shell地址](./使用jenkins实现github接收提交后在远程服务器部署流程/shell.png)
+
+
+最后一步，选择[构建后操作]配置我们代码要部署的远程服务器，输入服务路径，源码路径，部署代码的路径，已经部署后执行的脚本，这里我们是将压缩后的代码放置具体目录后，强制覆盖解压。
+
+![finall地址](./使用jenkins实现github接收提交后在远程服务器部署流程/finall.png)
+
+最后...
+最后...
+见证奇迹的时候到了，我们修改一下代码，对仓库进行push操作，就会在jenkins里出现一条构建记录，如果成功的话，构建记录左边会有一个蓝色的小球标识，失败的话会是红色。当让点击该记录可以进去看到更为详细的构建log
+
+![success地址](./使用jenkins实现github接收提交后在远程服务器部署流程/success.png)
+
