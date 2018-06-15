@@ -33,7 +33,7 @@ categories: 持续集成
 
 <!--more-->
 
-### 1. <span id="cmd_1">jenkins的安装</span>
+### 一: <span id="cmd_1">jenkins的安装</span>
 
 jenkins的安装比简单，我了解的有两种安装方式:
 
@@ -64,7 +64,7 @@ jenkins的安装比简单，我了解的有两种安装方式:
 
 ![首页](./使用jenkins实现github接收提交后在远程服务器部署流程/indexPage.png)
 
-### <span id="cmd_2">相关插件的安装</span>
+### 二: <span id="cmd_2">相关插件的安装</span>
 
 在本次示例场景下主要用到的两个插件分别是
 - Git plugin: 用于jenkins在每一次构建项目时从github拉取代码和一系列更新操作
@@ -79,7 +79,7 @@ jenkins的安装比简单，我了解的有两种安装方式:
 
 ![已安装](./使用jenkins实现github接收提交后在远程服务器部署流程/installed.png)
 
-### <span id="cmd_3">jenkins的相关配置</span>
+### 三: <span id="cmd_3">jenkins的相关配置</span>
 
 我们为了达到github的行为通知jenkins做出相应的响应，并将打包的代码发布到远程开发环境中，就需要分别对github和远端服务器在jenkins上做相应的配置。
 
@@ -109,7 +109,7 @@ token 生成后会返回上一个页面显示，这时必须将生成的 token �
 
 点击 [Test Configuration] 如果测试通过会有 success 的提示，就说名我们远端服务器和 jenkins 的连接成功了。
 
-### <span id="cmd_4">jenkins与github的webhook的挂载</span>
+### 四: <span id="cmd_4">jenkins与github的webhook的挂载</span>
 
 在上一步github的配置中，点击删除按钮的下面的 [高级] 按钮，勾选 Specify another hook url for GitHub configuration 复选框，下面会出现在github的webhook中需要配置的jenkins的地址。这个地址的作用是当github上有相应的相应，比如push或者pull reques的时候，github以这个地址给jenkins发一个post请求，通知jenkins开始构建。
 
@@ -124,7 +124,7 @@ token 生成后会返回上一个页面显示，这时必须将生成的 token �
 ![webhook地址](./使用jenkins实现github接收提交后在远程服务器部署流程/event.png)
 
 
-### <span id="cmd_5">实例项目的集成部署实例</span>
+### 五: <span id="cmd_5">实例项目的集成部署实例</span>
 
 至此，我们对于 jenkins 和 github 的相关配置就完成了，现在我们就来做一个小例子来实践以把，感受一下 jenkins 的便捷和威力
 
