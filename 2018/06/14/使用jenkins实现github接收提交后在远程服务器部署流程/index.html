@@ -1,0 +1,371 @@
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>使用jenkins实现github接收提交后在远程服务器部署流程 | warriorsworld&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="引言首先简单科普一下持续集成(Continuous Integration, 简称CI)的概念。 持续集成是一种软件开发实践，即团队开发成员经常集成他们的工作，通常每个成员每天至少集成一次，也就意味着每天可能会发生多次集成。每次集成都通过自动化的构建(包括编译，发布，自动化测试)来验证，从而尽快地发现集成错误。 — Martin Fowler   从应用的角度来说，也就是在我们的项目开发中，任何人">
+<meta name="keywords" content="jenkins,github">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用jenkins实现github接收提交后在远程服务器部署流程">
+<meta property="og:url" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/index.html">
+<meta property="og:site_name" content="warriorsworld&#39;s blog">
+<meta property="og:description" content="引言首先简单科普一下持续集成(Continuous Integration, 简称CI)的概念。 持续集成是一种软件开发实践，即团队开发成员经常集成他们的工作，通常每个成员每天至少集成一次，也就意味着每天可能会发生多次集成。每次集成都通过自动化的构建(包括编译，发布，自动化测试)来验证，从而尽快地发现集成错误。 — Martin Fowler   从应用的角度来说，也就是在我们的项目开发中，任何人">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/init.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/custom.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/install.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/createUser.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/indexPage.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/pluginManage.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/installed.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/renzheng.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/tokenPage.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/generateToken.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/newToken.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/server.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/hookurl.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/hook.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/event.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/create.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/general.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/sourceManage.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/handle.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/env.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/shell.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/finall.png">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/success.png">
+<meta property="og:updated_time" content="2018-06-15T06:36:15.833Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用jenkins实现github接收提交后在远程服务器部署流程">
+<meta name="twitter:description" content="引言首先简单科普一下持续集成(Continuous Integration, 简称CI)的概念。 持续集成是一种软件开发实践，即团队开发成员经常集成他们的工作，通常每个成员每天至少集成一次，也就意味着每天可能会发生多次集成。每次集成都通过自动化的构建(包括编译，发布，自动化测试)来验证，从而尽快地发现集成错误。 — Martin Fowler   从应用的角度来说，也就是在我们的项目开发中，任何人">
+<meta name="twitter:image" content="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/init.png">
+  
+    <link rel="alternate" href="../../../../atom.xml" title="warriorsworld&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">warriorsworld&#39;s blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="../../../../index.html" id="subtitle">我也来做一个网络资源贡献者</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">首页</a>
+        
+          <a class="main-nav-link" href="../../../../archives">文章列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="../../../../atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://warriorsworld.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-使用jenkins实现github接收提交后在远程服务器部署流程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-06-14T01:28:01.000Z" itemprop="datePublished">2018-06-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/CI/">持续集成</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <h1 class="article-title" itemprop="name">
+      使用jenkins实现github接收提交后在远程服务器部署流程
+      <span style="display: block;float: right;font-size: 12px;color: #666" id="busuanzi_container_page_pv">
+        本文总阅读<span id="busuanzi_value_page_pv">0</span>次
+      </span>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>首先简单科普一下<a href="https://baike.baidu.com/item/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/6250744" target="_blank" rel="noopener">持续集成</a>(Continuous Integration, 简称CI)的概念。</p>
+<blockquote style="padding: 16px;background: #EEF0F4;border-left: 8px solid #DDDFE4;">持续集成是一种软件开发实践，即团队开发成员经常集成他们的工作，通常每个成员每天至少集成一次，也就意味着每天可能会发生多次集成。每次集成都通过自动化的构建(包括编译，发布，自动化测试)来验证，从而尽快地发现集成错误。 — Martin Fowler</blockquote> 
+
+<p>从应用的角度来说，也就是在我们的项目开发中，任何人对代码库的修改，都会触发CI服务器对项目的自动构建，自动运行测试，甚至到最后的测试环境部署。这样做的好处是，随时的发现问题，随时修复，可以让产品快速的迭代，同时还能保证代码质量。常用的持续集成软件有:</p>
+<ul>
+<li><p>Travis CI：是一个在线托管的CI服务，和github强关联。使用它来持续集成，不需要自己搭建服务器，对开源项目免费，对github的私有项目需有偿使用。</p>
+</li>
+<li><p>Jenkins CI：需要自己搭服务器，功能与Travis类似，免费的CI提供商。</p>
+</li>
+</ul>
+<p>除此之外还有 <a href="https://codeship.com/" target="_blank" rel="noopener">CodeShip</a>，<a href="https://www.pmease.com/" target="_blank" rel="noopener">QuickBuild</a> 等常见的构建工具，大家有兴趣可以学习了解一下。</p>
+<h3 id="本文实现目标"><a href="#本文实现目标" class="headerlink" title="本文实现目标"></a>本文实现目标</h3><p>本文将从 jenkins 的安装，配置，插件安装以及最终实现在 github 提交代码后，经过 jenkins 的自动化构建将最终打包好的代码部署在远程的测试服务器的整个流程为目标来讲解前端代码自动化部署的过程。</p>
+<ol>
+<li><a href="#cmd_1">jenkins的安装</a></li>
+<li><a href="#cmd_2">相关插件的安装</a></li>
+<li><a href="#cmd_3">jenkins的相关配置</a></li>
+<li><a href="#cmd_4">jenkins与github的webhook的挂载</a></li>
+<li><a href="#cmd_5">实例项目的集成部署实例</a></li>
+</ol>
+<a id="more"></a>
+<h3 id="一-jenkins的安装"><a href="#一-jenkins的安装" class="headerlink" title="一: jenkins的安装"></a>一: <span id="cmd_1">jenkins的安装</span></h3><p>jenkins的安装比简单，我了解的有两种安装方式:</p>
+<ul>
+<li>war包<a href="http://mirrors.jenkins-ci.org/war-stable/" target="_blank" rel="noopener">(下载地址)</a>的安装方式: </li>
+</ul>
+<ol>
+<li><p>启动方式一: 进入到jenkins.war存放的目录，输入如下命令：<code> java -jar jenkins.war </code>，浏览器输入<code> localhost:8080 </code>即可访问；</p>
+</li>
+<li><p>启动方式二: 用tomcat打开，将jenkins.war文件放入tomcat下的webapps目录下；重启tomcat，浏览器输入<code> localhost:8080/jenkins </code>即可访问。</p>
+</li>
+</ol>
+<div style="color: red">使用 war 注意的坑是，不同版本的 jenkins 对 jdk 的版本有一定的要求，我开始下载的最新版本的<code> jenkins 2.121.1 </code> 在<code> java7 </code>下就不支持，大家使用的时候注意下</div>
+
+<ul>
+<li>msi安装包安装: 傻瓜式的下一步点到头就好了，浏览器输入<code> localhost:8080 </code>即可访问。</li>
+</ul>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/init.png" alt="安装成功图片"></p>
+<p>初始的管理员密码，jenkins自动生成的，根据上面红色的路径找到密码，拷到下面的输入框中即可。</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/custom.png" alt="自定义jenkins"></p>
+<p>安装插件，可以默认的安装，也可以自己选择，（jenkins配置好后也可以安装插件）这里我们选择默认的。</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/install.png" alt="安装过程中"></p>
+<p>安装完成以后，我们开始创建用户</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/createUser.png" alt="创建用户"></p>
+<p>后就可以进入到jenkins的主页了</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/indexPage.png" alt="首页"></p>
+<h3 id="二-相关插件的安装"><a href="#二-相关插件的安装" class="headerlink" title="二: 相关插件的安装"></a>二: <span id="cmd_2">相关插件的安装</span></h3><p>在本次示例场景下主要用到的两个插件分别是</p>
+<ul>
+<li><p>Git plugin: 用于jenkins在每一次构建项目时从github拉取代码和一系列更新操作</p>
+</li>
+<li><p>GitHub Plugin: 用于jenkins与github之间的通讯</p>
+</li>
+</ul>
+<p>默认在我们安装jenkins使用了安装jenkins推荐的插件安装选项，Git plugin插件就会被安装。如果没有安装，我们可以从 [系统管理] &gt; [管理插件] &gt; [可选插件] 中安装我们需要的相关插件。</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/pluginManage.png" alt="插件管理"></p>
+<p>插件安装好后，我们可以在 [已安装]中找到安装过的插件，并对插件进行管理</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/installed.png" alt="已安装"></p>
+<h3 id="三-jenkins的相关配置"><a href="#三-jenkins的相关配置" class="headerlink" title="三: jenkins的相关配置"></a>三: <span id="cmd_3">jenkins的相关配置</span></h3><p>我们为了达到github的行为通知jenkins做出相应的响应，并将打包的代码发布到远程开发环境中，就需要分别对github和远端服务器在jenkins上做相应的配置。</p>
+<h4 id="1-配置jenkins访问github的权限"><a href="#1-配置jenkins访问github的权限" class="headerlink" title="1. 配置jenkins访问github的权限"></a>1. 配置jenkins访问github的权限</h4><p>github plugin 插件安装好后，我们通过 [系统管理] &gt; [系统设置] 找到 Github，对 Github 进行配置。首先填写 API URL，如果我们用的免费版本，填写 <a href="https://api.github.com" target="_blank" rel="noopener">https://api.github.com</a> 就好，在认证部分点击 add &gt; jenkins , 在 kind 的中选择 Secret text</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/renzheng.png" alt="renzheng"></p>
+<p>其中 ID 和 Description 可以随意填写， Secret 需要到 github 账户 Settings &gt; Developer settings &gt; Personal access tokens 去生成</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/tokenPage.png" alt="tokenPage"></p>
+<p>在生成 token 的页面填写token描述信息，并勾选相应的权限，如果拿不准，可以全部选择。jenkins 中提示至少需要 admin:repo_hook，repo，以及 repo:status 这三个权限</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/generateToken.png" alt="generateToken"></p>
+<p>token 生成后会返回上一个页面显示，这时必须将生成的 token 保存下来(该token只会在第一次生成显示，刷新页面将会消失，如果没有记住就得重新生成)，填入刚才 Secret 的输入框中。</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/newToken.png" alt="newToken"></p>
+<h4 id="2-配置远程服务器地址"><a href="#2-配置远程服务器地址" class="headerlink" title="2. 配置远程服务器地址"></a>2. 配置远程服务器地址</h4><p>进入[系统管理] &gt; [系统设置] &gt; Publish over SSH 进行配置，分别填写服务器名称, 远端地址，用户名，以及远端的路径。该远端路径也就是之后代码部署的基础路径。</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/server.png" alt="已安装"></p>
+<p>点击 [Test Configuration] 如果测试通过会有 success 的提示，就说名我们远端服务器和 jenkins 的连接成功了。</p>
+<h3 id="四-jenkins与github的webhook的挂载"><a href="#四-jenkins与github的webhook的挂载" class="headerlink" title="四: jenkins与github的webhook的挂载"></a>四: <span id="cmd_4">jenkins与github的webhook的挂载</span></h3><p>在上一步github的配置中，点击删除按钮的下面的 [高级] 按钮，勾选 Specify another hook url for GitHub configuration 复选框，下面会出现在github的webhook中需要配置的jenkins的地址。这个地址的作用是当github上有相应的相应，比如push或者pull reques的时候，github以这个地址给jenkins发一个post请求，通知jenkins开始构建。</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/hookurl.png" alt="webhook地址"></p>
+<p>然后在到github相应的仓库在 settings &gt; Hooks 下，将该地址填入相应的位置</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/hook.png" alt="webhook地址"></p>
+<p>然后选择触发的事件类型，这个我们选择 Pushes 和 Pull request</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/event.png" alt="webhook地址"></p>
+<h3 id="五-实例项目的集成部署实例"><a href="#五-实例项目的集成部署实例" class="headerlink" title="五: 实例项目的集成部署实例"></a>五: <span id="cmd_5">实例项目的集成部署实例</span></h3><p>至此，我们对于 jenkins 和 github 的相关配置就完成了，现在我们就来做一个小例子来实践以把，感受一下 jenkins 的便捷和威力</p>
+<ol>
+<li>创建一个项目: 在 jenkins 首页点击 [新建] 填入项目名称，选择 [构建一个自由风格的软件项目]并点击 ok</li>
+</ol>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/create.png" alt="create地址"></p>
+<ol start="2">
+<li>对项目进项配置，首先配置项目的基础信息，包括项目名称，描述，github的仓库地址</li>
+</ol>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/general.png" alt="general地址"></p>
+<p>其次，配置项目的源码管理，选择 git ,配置仓库地址，构建分支等</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/sourceManage.png" alt="sourceManage地址"></p>
+<p>第三，配置构建触发器，选择 GitHub hook trigger for GITScm polling</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/handle.png" alt="handle地址"></p>
+<p>第四，配置构建环境，选择 Use secret text(s) or file(s)，并在 Bindings 中选择之前添加的 Credential</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/env.png" alt="env地址"></p>
+<p>第五步，添加构建步骤，这里选择 Execute shell 即执行一段脚本，脚本可以在 command 输入框中填写，写可以单独写一个 sh 文件，单独执行。</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/shell.png" alt="shell地址"></p>
+<p>最后一步，选择[构建后操作]配置我们代码要部署的远程服务器，输入服务路径，源码路径，部署代码的路径，已经部署后执行的脚本，这里我们是将压缩后的代码放置具体目录后，强制覆盖解压。</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/finall.png" alt="finall地址"></p>
+<p>最后…<br>最后…<br>见证奇迹的时候到了，我们修改一下代码，对仓库进行push操作，就会在jenkins里出现一条构建记录，如果成功的话，构建记录左边会有一个蓝色的小球标识，失败的话会是红色。当让点击该记录可以进去看到更为详细的构建log</p>
+<p><img src="/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/success.png" alt="success地址"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/" data-id="cjiflpvju000arojxx6f7wfgw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/github/">github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/jenkins/">jenkins</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="../../../05/29/git如何删除无用分支/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">git如何删除无用分支</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  
+  <div id="gitComment"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    const gitment = new Gitment({
+        id: 'gitComment',
+        owner: 'warriorsworld',
+        repo: 'warriorsworld.github.io',
+        oauth: {
+            client_id: '9f157940865f0970c340',
+            client_secret: 'b08e4c0c7392b9cf5f0e42de63776814eb0b91ce',
+        }
+    });
+    gitment.render('gitComment')
+</script>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/CI/">持续集成</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/CVS/">版本控制</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/jenkins/">jenkins</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/git/" style="font-size: 20px;">git</a> <a href="../../../../tags/github/" style="font-size: 10px;">github</a> <a href="../../../../tags/jenkins/" style="font-size: 10px;">jenkins</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="">使用jenkins实现github接收提交后在远程服务器部署流程</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/29/git如何删除无用分支/">git如何删除无用分支</a>
+          </li>
+        
+          <li>
+            <a href="../../../05/22/git-diff/">如何使用git diff命令查看差异</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div style="text-align: center" id="footer-info" class="inner">
+      &copy; 2018 warriorsworld |
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> |
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">首页</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">文章列表</a>
+  
+</nav>
+    
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

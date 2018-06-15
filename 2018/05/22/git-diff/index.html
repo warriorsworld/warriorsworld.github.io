@@ -1,0 +1,282 @@
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>如何使用git diff命令查看差异 | warriorsworld&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="引言我们知道一个git项目由三个部分组成，工作区(work tree)，暂存区(index area)以及版本库。我们所关注的是文件在这三个部分之间的差别,以及版本库中不同历史提交之间的差别。在实际的工作中对于比较文件差异我们一般会使用编辑器自带的功能或者是安装插件，但是了解一些命令对与学习git也是很有帮助的。  常用的四个比较命令： git diff [--options] [--] [&amp;lt">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何使用git diff命令查看差异">
+<meta property="og:url" content="https://warriorsworld.github.io/2018/05/22/git-diff/index.html">
+<meta property="og:site_name" content="warriorsworld&#39;s blog">
+<meta property="og:description" content="引言我们知道一个git项目由三个部分组成，工作区(work tree)，暂存区(index area)以及版本库。我们所关注的是文件在这三个部分之间的差别,以及版本库中不同历史提交之间的差别。在实际的工作中对于比较文件差异我们一般会使用编辑器自带的功能或者是安装插件，但是了解一些命令对与学习git也是很有帮助的。  常用的四个比较命令： git diff [--options] [--] [&amp;lt">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/05/22/git-diff/gitSketch.png">
+<meta property="og:updated_time" content="2018-06-15T06:36:15.829Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何使用git diff命令查看差异">
+<meta name="twitter:description" content="引言我们知道一个git项目由三个部分组成，工作区(work tree)，暂存区(index area)以及版本库。我们所关注的是文件在这三个部分之间的差别,以及版本库中不同历史提交之间的差别。在实际的工作中对于比较文件差异我们一般会使用编辑器自带的功能或者是安装插件，但是了解一些命令对与学习git也是很有帮助的。  常用的四个比较命令： git diff [--options] [--] [&amp;lt">
+<meta name="twitter:image" content="https://warriorsworld.github.io/2018/05/22/git-diff/gitSketch.png">
+  
+    <link rel="alternate" href="../../../../atom.xml" title="warriorsworld&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">warriorsworld&#39;s blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="../../../../index.html" id="subtitle">我也来做一个网络资源贡献者</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">首页</a>
+        
+          <a class="main-nav-link" href="../../../../archives">文章列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="../../../../atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://warriorsworld.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-git-diff" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-05-22T02:28:39.000Z" itemprop="datePublished">2018-05-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/CVS/">版本控制</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <h1 class="article-title" itemprop="name">
+      如何使用git diff命令查看差异
+      <span style="display: block;float: right;font-size: 12px;color: #666" id="busuanzi_container_page_pv">
+        本文总阅读<span id="busuanzi_value_page_pv">0</span>次
+      </span>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>我们知道一个git项目由三个部分组成，工作区(work tree)，暂存区(index area)以及版本库。我们所关注的是文件在这三个部分之间的差别,以及版本库中不同历史提交之间的差别。在实际的工作中对于比较文件差异我们一般会使用编辑器自带的功能或者是安装插件，但是了解一些命令对与学习git也是很有帮助的。</p>
+<p><img src="/2018/05/22/git-diff/gitSketch.png" alt="git仓库结构图"></p>
+<h3 id="常用的四个比较命令："><a href="#常用的四个比较命令：" class="headerlink" title="常用的四个比较命令："></a>常用的四个比较命令：</h3><ol>
+<li><a href="#cmd_1"><code>git diff [--options] [--] [&lt;path&gt;…​]</code></a></li>
+<li><a href="#cmd_2"><code>git diff [--options] --cached [&lt;commit&gt;] [--] [&lt;path&gt;…​]</code></a></li>
+<li><a href="#cmd_3"><code>git diff [--options] &lt;commit&gt; [--] [&lt;path&gt;…​]</code></a></li>
+<li><a href="#cmd_4"><code>git diff [--options] &lt;commit&gt; &lt;commit&gt; [--] [&lt;path&gt;…​]</code></a></li>
+</ol>
+<a id="more"></a>
+<h3 id="1-git-diff-options-lt-path-gt-…​-工作区文件和暂存区文件差异"><a href="#1-git-diff-options-lt-path-gt-…​-工作区文件和暂存区文件差异" class="headerlink" title="1: git diff [--options] [--] [&lt;path&gt;…​] 工作区文件和暂存区文件差异:"></a>1: <code>git diff [--options] [--] [&lt;path&gt;…​]</code> <span id="cmd_1">工作区文件和暂存区文件差异:</span></h3><p>该命令是用于比较工作区(work tree)中的文件与暂存区(index/staged area)域快照之间的差异， 也就是修改之后还没有暂存起来的变化内容。</p>
+<figure class="highlight bash"><figcaption><span>查看当前修改状态</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">E:\warriorsworld.github.io&gt;git status</span><br><span class="line">On branch sourceCode</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">"git reset HEAD &lt;file&gt;..."</span> to unstage)</span><br><span class="line"></span><br><span class="line">        modified:   <span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line"></span><br><span class="line">Changes not staged <span class="keyword">for</span> commit:</span><br><span class="line">  (use <span class="string">"git add &lt;file&gt;..."</span> to update what will be committed)</span><br><span class="line">  (use <span class="string">"git checkout -- &lt;file&gt;..."</span> to discard changes <span class="keyword">in</span> working directory)</span><br><span class="line"></span><br><span class="line">        modified:   <span class="built_in">source</span>/_posts/hello-world.md</span><br></pre></td></tr></table></figure>
+<p>例如在上面的操作中，先对hello-word文件内第6行增加一个modified英文单词，然后通过<code>git add .</code>将改动增加到暂存区。然后在第7行增加modify单词。然后输入<code>git diff</code>会看到只有最后一次修改没有加入到暂存区的差异。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">E:\warriorsworld.github.io&gt;git diff</span><br><span class="line">diff --git a/<span class="built_in">source</span>/_posts/hello-world.md b/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">index 4c0ee2d..41e5f3d 100644</span><br><span class="line">--- a/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">+++ b/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">@@ -5,7 +5,7 @@ Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [docume</span><br><span class="line"></span><br><span class="line"> <span class="comment">## Quick Start modified</span></span><br><span class="line"></span><br><span class="line">-<span class="comment">### Create a new post</span></span><br><span class="line">+<span class="comment">### Create a new post modify</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-git-diff-options-cached-lt-commit-gt-lt-path-gt-…​-暂存区与版本库之间的差异"><a href="#2-git-diff-options-cached-lt-commit-gt-lt-path-gt-…​-暂存区与版本库之间的差异" class="headerlink" title="2: git diff [--options] --cached [&lt;commit&gt;] [--] [&lt;path&gt;…​] 暂存区与版本库之间的差异:"></a>2: <code>git diff [--options] --cached [&lt;commit&gt;] [--] [&lt;path&gt;…​]</code> <span id="cmd_2">暂存区与版本库之间的差异:</span></h3><p>该命令是用于比较暂存区(index/staged area)域快照与版本库之间的差异， 也就是通过<code>git add</code>命令添加进暂存区与版本库之间的差异，如果不加之前提交版本号就是比较与最后一次提交比较的差异，当然还可以添加历史提交版本号以及具体路径或是文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">E:\warriorsworld.github.io&gt;git diff --cached</span><br><span class="line">diff --git a/<span class="built_in">source</span>/_posts/hello-world.md b/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">index c090297..4c0ee2d 100644</span><br><span class="line">--- a/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">+++ b/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">@@ -3,7 +3,7 @@ title: Hello World</span><br><span class="line"> ---</span><br><span class="line"> Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) <span class="keyword">for</span> more info. If you get any problems when using Hexo, you can find the answer <span class="keyword">in</span> [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).</span><br><span class="line"></span><br><span class="line">-<span class="comment">## Quick Start</span></span><br><span class="line">+<span class="comment">## Quick Start modified</span></span><br></pre></td></tr></table></figure>
+<p>我们接着上次的修改执行<code>git diff –cached</code>命令，应该只会比较出之前在第6行添加进暂存区的modified的修改内容。</p>
+<h3 id="3-git-diff-options-lt-commit-gt-lt-path-gt-…​-工作区-work-tree-本库之间的差异"><a href="#3-git-diff-options-lt-commit-gt-lt-path-gt-…​-工作区-work-tree-本库之间的差异" class="headerlink" title="3: git diff [--options] &lt;commit&gt; [--] [&lt;path&gt;…​] 工作区(work tree)本库之间的差异:"></a>3: <code>git diff [--options] &lt;commit&gt; [--] [&lt;path&gt;…​]</code> <span id="cmd_3">工作区(work tree)本库之间的差异:</span></h3><p>这里需要注意的是<code>git diff</code>不添加参数是比较工作区与暂存之间的差异，如果添加具体版本号参数则是比较工作区与版本库中具体版本之间的差异。那么大家想想如果现在我执行该命令与最后一次提交的比较会是什么结果呢？没错，当然就应该包括暂存起来的修改和暂存之后再次修改的总和了。不信我们试试~</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">E:\warriorsworld.github.io&gt;git diff b823cb6c4103363ac880c67e9183897e24f366b2</span><br><span class="line">diff --git a/<span class="built_in">source</span>/_posts/hello-world.md b/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">index c090297..41e5f3d 100644</span><br><span class="line">--- a/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">+++ b/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">@@ -3,9 +3,9 @@ title: Hello World</span><br><span class="line"> ---</span><br><span class="line"> Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) <span class="keyword">for</span> more info. If you get any problems when using Hexo, you can find the answer <span class="keyword">in</span> [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).</span><br><span class="line"></span><br><span class="line">-<span class="comment">## Quick Start</span></span><br><span class="line">+<span class="comment">## Quick Start modified</span></span><br><span class="line"></span><br><span class="line">-<span class="comment">### Create a new post</span></span><br><span class="line">+<span class="comment">### Create a new post modify</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-git-diff-options-lt-commit-gt-lt-commit-gt-lt-path-gt-…​-本库中不同版本之间的差异"><a href="#4-git-diff-options-lt-commit-gt-lt-commit-gt-lt-path-gt-…​-本库中不同版本之间的差异" class="headerlink" title="4: git diff [--options] &lt;commit&gt; &lt;commit&gt; [--] [&lt;path&gt;…​] 本库中不同版本之间的差异:"></a>4: <code>git diff [--options] &lt;commit&gt; &lt;commit&gt; [--] [&lt;path&gt;…​]</code> <span id="cmd_4">本库中不同版本之间的差异:</span></h3><p>版本库会记录着我们每一次的提交历史，当我我们要对比历史两个版本的所有修改或是某个文件或是路径的修改，该命令可以帮到我们。现在接着我们将之前的修改提交到版本库中，然后再在第六行后面添加一个单词’test’，然后执行该命令看看会是什么结果。</p>
+<p>首先我们执行<code>git log –pretty=oneline</code>来查看历史的提交记录，将会按提交时间的进行排列，最后提交的在最上面。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">E:\warriorsworld.github.io&gt;git <span class="built_in">log</span> --pretty=oneline</span><br><span class="line">2465e830e114302198c3ef2542367aa3640e1ab9 (HEAD -&gt; sourceCode) <span class="string">'再添加一个历史版本'</span></span><br><span class="line">67ab9471ee50064fa173725c4a73f05e2f6480bd <span class="string">'添加一个历史版本'</span></span><br><span class="line">b823cb6c4103363ac880c67e9183897e24f366b2 (origin/sourceCode, master) 测试</span><br><span class="line">566b901caccf227acb32578ad21a5c2f506da9ea hello world</span><br></pre></td></tr></table></figure>
+<p>然后我们通过执行git diff 67ab94 2465e命令进行最后两个提交版本的比较。注意，参数的顺序是第一个参数是倒数第二个提交，第二个版本号是最后一次提交，这样我们才能看到增加了<code>test</code>的结果，如果两个版本号互换位置的话就会得到相反的结果。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">E:\warriorsworld.github.io&gt;git diff 67ab94 2465e</span><br><span class="line">diff --git a/<span class="built_in">source</span>/_posts/hello-world.md b/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">index 41e5f3d..02c119b 100644</span><br><span class="line">--- a/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">+++ b/<span class="built_in">source</span>/_posts/hello-world.md</span><br><span class="line">@@ -3,7 +3,7 @@ title: Hello World</span><br><span class="line"> ---</span><br><span class="line"> Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) <span class="keyword">for</span> more info. If you get any problems when using Hexo, you can find the answer <span class="keyword">in</span> [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).</span><br><span class="line"></span><br><span class="line">-<span class="comment">## Quick Start modified</span></span><br><span class="line">+<span class="comment">## Quick Start modified test</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">### Create a new post modify</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://warriorsworld.github.io/2018/05/22/git-diff/" data-id="cjiflpviv0000rojxnwpaljxr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../29/git如何删除无用分支/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          git如何删除无用分支
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+  
+  <div id="gitComment"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    const gitment = new Gitment({
+        id: 'gitComment',
+        owner: 'warriorsworld',
+        repo: 'warriorsworld.github.io',
+        oauth: {
+            client_id: '9f157940865f0970c340',
+            client_secret: 'b08e4c0c7392b9cf5f0e42de63776814eb0b91ce',
+        }
+    });
+    gitment.render('gitComment')
+</script>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/CI/">持续集成</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/CVS/">版本控制</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/jenkins/">jenkins</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/git/" style="font-size: 20px;">git</a> <a href="../../../../tags/github/" style="font-size: 10px;">github</a> <a href="../../../../tags/jenkins/" style="font-size: 10px;">jenkins</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/14/使用jenkins实现github接收提交后在远程服务器部署流程/">使用jenkins实现github接收提交后在远程服务器部署流程</a>
+          </li>
+        
+          <li>
+            <a href="../../29/git如何删除无用分支/">git如何删除无用分支</a>
+          </li>
+        
+          <li>
+            <a href="">如何使用git diff命令查看差异</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div style="text-align: center" id="footer-info" class="inner">
+      &copy; 2018 warriorsworld |
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> |
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">首页</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">文章列表</a>
+  
+</nav>
+    
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

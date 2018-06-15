@@ -1,0 +1,364 @@
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>warriorsworld&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="点滴积累">
+<meta property="og:type" content="website">
+<meta property="og:title" content="warriorsworld&#39;s blog">
+<meta property="og:url" content="https://warriorsworld.github.io/index.html">
+<meta property="og:site_name" content="warriorsworld&#39;s blog">
+<meta property="og:description" content="点滴积累">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="warriorsworld&#39;s blog">
+<meta name="twitter:description" content="点滴积累">
+  
+    <link rel="alternate" href="/atom.xml" title="warriorsworld&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="index.html" id="logo">warriorsworld&#39;s blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="index.html" id="subtitle">我也来做一个网络资源贡献者</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="index.html">首页</a>
+        
+          <a class="main-nav-link" href="/archives">文章列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://warriorsworld.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-使用jenkins实现github接收提交后在远程服务器部署流程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/" class="article-date">
+  <time datetime="2018-06-14T01:28:01.000Z" itemprop="datePublished">2018-06-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="categories/CI/">持续集成</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/">使用jenkins实现github接收提交后在远程服务器部署流程</a>
+      <span style="display: block;float: right;font-size: 12px;color: #666" id="busuanzi_container_page_pv">
+        本文总阅读<span id="busuanzi_value_page_pv">0</span>次
+      </span>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>首先简单科普一下<a href="https://baike.baidu.com/item/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/6250744" target="_blank" rel="noopener">持续集成</a>(Continuous Integration, 简称CI)的概念。</p>
+<blockquote style="padding: 16px;background: #EEF0F4;border-left: 8px solid #DDDFE4;">持续集成是一种软件开发实践，即团队开发成员经常集成他们的工作，通常每个成员每天至少集成一次，也就意味着每天可能会发生多次集成。每次集成都通过自动化的构建(包括编译，发布，自动化测试)来验证，从而尽快地发现集成错误。 — Martin Fowler</blockquote> 
+
+<p>从应用的角度来说，也就是在我们的项目开发中，任何人对代码库的修改，都会触发CI服务器对项目的自动构建，自动运行测试，甚至到最后的测试环境部署。这样做的好处是，随时的发现问题，随时修复，可以让产品快速的迭代，同时还能保证代码质量。常用的持续集成软件有:</p>
+<ul>
+<li><p>Travis CI：是一个在线托管的CI服务，和github强关联。使用它来持续集成，不需要自己搭建服务器，对开源项目免费，对github的私有项目需有偿使用。</p>
+</li>
+<li><p>Jenkins CI：需要自己搭服务器，功能与Travis类似，免费的CI提供商。</p>
+</li>
+</ul>
+<p>除此之外还有 <a href="https://codeship.com/" target="_blank" rel="noopener">CodeShip</a>，<a href="https://www.pmease.com/" target="_blank" rel="noopener">QuickBuild</a> 等常见的构建工具，大家有兴趣可以学习了解一下。</p>
+<h3 id="本文实现目标"><a href="#本文实现目标" class="headerlink" title="本文实现目标"></a>本文实现目标</h3><p>本文将从 jenkins 的安装，配置，插件安装以及最终实现在 github 提交代码后，经过 jenkins 的自动化构建将最终打包好的代码部署在远程的测试服务器的整个流程为目标来讲解前端代码自动化部署的过程。</p>
+<ol>
+<li><a href="#cmd_1">jenkins的安装</a></li>
+<li><a href="#cmd_2">相关插件的安装</a></li>
+<li><a href="#cmd_3">jenkins的相关配置</a></li>
+<li><a href="#cmd_4">jenkins与github的webhook的挂载</a></li>
+<li><a href="#cmd_5">实例项目的集成部署实例</a></li>
+</ol>
+        
+          <p class="article-more-link">
+            <a href="2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://warriorsworld.github.io/2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/" data-id="cjiflpvju000arojxx6f7wfgw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/github/">github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/jenkins/">jenkins</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-git如何删除无用分支" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="2018/05/29/git如何删除无用分支/" class="article-date">
+  <time datetime="2018-05-29T07:32:38.000Z" itemprop="datePublished">2018-05-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="categories/CVS/">版本控制</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2018/05/29/git如何删除无用分支/">git如何删除无用分支</a>
+      <span style="display: block;float: right;font-size: 12px;color: #666" id="busuanzi_container_page_pv">
+        本文总阅读<span id="busuanzi_value_page_pv">0</span>次
+      </span>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>我们在协同迭代开发的过程中经常会碰到这样一种场景，就是我们在开发过程中的不同阶段要给测试提供一个版本的代码，这个版本可能需要维护一段事件，主干也会同步开发新的功能。项目周期很长的话就会产生很多分支代，而且有的分支代码随着产品的迭代合并早已不再维护或许已在远端删除，但是这些分支快照仍然在你的本地仓库中存在。如果在产生一个新的需要维护的分支，当从远端拉下代码后，在一大堆分支列表里找到要维护的分支名称有时都有点费事。所以我们来说一说如何保持我们本地仓库分支的整洁。</p>
+<h3 id="这个场景下使用到的命令只有三个"><a href="#这个场景下使用到的命令只有三个" class="headerlink" title="这个场景下使用到的命令只有三个"></a>这个场景下使用到的命令只有三个</h3><ol>
+<li><a href="#cmd_1"><code>git branch [-a|-r]</code></a></li>
+<li><a href="#cmd_2"><code>git remote show origin</code></a></li>
+<li><a href="#cmd_3"><code>git remote prune origin</code></a></li>
+</ol>
+        
+          <p class="article-more-link">
+            <a href="2018/05/29/git如何删除无用分支/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://warriorsworld.github.io/2018/05/29/git如何删除无用分支/" data-id="cjiflpvj40001rojxn4dzn989" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-git-diff" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="2018/05/22/git-diff/" class="article-date">
+  <time datetime="2018-05-22T02:28:39.000Z" itemprop="datePublished">2018-05-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="categories/CVS/">版本控制</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2018/05/22/git-diff/">如何使用git diff命令查看差异</a>
+      <span style="display: block;float: right;font-size: 12px;color: #666" id="busuanzi_container_page_pv">
+        本文总阅读<span id="busuanzi_value_page_pv">0</span>次
+      </span>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>我们知道一个git项目由三个部分组成，工作区(work tree)，暂存区(index area)以及版本库。我们所关注的是文件在这三个部分之间的差别,以及版本库中不同历史提交之间的差别。在实际的工作中对于比较文件差异我们一般会使用编辑器自带的功能或者是安装插件，但是了解一些命令对与学习git也是很有帮助的。</p>
+<p><img src="/2018/05/22/git-diff/gitSketch.png" alt="git仓库结构图"></p>
+<h3 id="常用的四个比较命令："><a href="#常用的四个比较命令：" class="headerlink" title="常用的四个比较命令："></a>常用的四个比较命令：</h3><ol>
+<li><a href="#cmd_1"><code>git diff [--options] [--] [&lt;path&gt;…​]</code></a></li>
+<li><a href="#cmd_2"><code>git diff [--options] --cached [&lt;commit&gt;] [--] [&lt;path&gt;…​]</code></a></li>
+<li><a href="#cmd_3"><code>git diff [--options] &lt;commit&gt; [--] [&lt;path&gt;…​]</code></a></li>
+<li><a href="#cmd_4"><code>git diff [--options] &lt;commit&gt; &lt;commit&gt; [--] [&lt;path&gt;…​]</code></a></li>
+</ol>
+        
+          <p class="article-more-link">
+            <a href="2018/05/22/git-diff/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://warriorsworld.github.io/2018/05/22/git-diff/" data-id="cjiflpviv0000rojxnwpaljxr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="categories/CI/">持续集成</a></li><li class="category-list-item"><a class="category-list-link" href="categories/CVS/">版本控制</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="tags/jenkins/">jenkins</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="tags/git/" style="font-size: 20px;">git</a> <a href="tags/github/" style="font-size: 10px;">github</a> <a href="tags/jenkins/" style="font-size: 10px;">jenkins</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="2018/06/14/使用jenkins实现github接收提交后在远程服务器部署流程/">使用jenkins实现github接收提交后在远程服务器部署流程</a>
+          </li>
+        
+          <li>
+            <a href="2018/05/29/git如何删除无用分支/">git如何删除无用分支</a>
+          </li>
+        
+          <li>
+            <a href="2018/05/22/git-diff/">如何使用git diff命令查看差异</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div style="text-align: center" id="footer-info" class="inner">
+      &copy; 2018 warriorsworld |
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> |
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="index.html" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">文章列表</a>
+  
+</nav>
+    
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" href="fancybox/jquery.fancybox.css">
+  <script src="fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

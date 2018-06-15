@@ -1,0 +1,281 @@
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>git如何删除无用分支 | warriorsworld&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="引言我们在协同迭代开发的过程中经常会碰到这样一种场景，就是我们在开发过程中的不同阶段要给测试提供一个版本的代码，这个版本可能需要维护一段事件，主干也会同步开发新的功能。项目周期很长的话就会产生很多分支代，而且有的分支代码随着产品的迭代合并早已不再维护或许已在远端删除，但是这些分支快照仍然在你的本地仓库中存在。如果在产生一个新的需要维护的分支，当从远端拉下代码后，在一大堆分支列表里找到要维护的分支名">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git如何删除无用分支">
+<meta property="og:url" content="https://warriorsworld.github.io/2018/05/29/git如何删除无用分支/index.html">
+<meta property="og:site_name" content="warriorsworld&#39;s blog">
+<meta property="og:description" content="引言我们在协同迭代开发的过程中经常会碰到这样一种场景，就是我们在开发过程中的不同阶段要给测试提供一个版本的代码，这个版本可能需要维护一段事件，主干也会同步开发新的功能。项目周期很长的话就会产生很多分支代，而且有的分支代码随着产品的迭代合并早已不再维护或许已在远端删除，但是这些分支快照仍然在你的本地仓库中存在。如果在产生一个新的需要维护的分支，当从远端拉下代码后，在一大堆分支列表里找到要维护的分支名">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://warriorsworld.github.io/2018/05/29/git如何删除无用分支/branhImage.png">
+<meta property="og:updated_time" content="2018-06-15T06:36:15.833Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git如何删除无用分支">
+<meta name="twitter:description" content="引言我们在协同迭代开发的过程中经常会碰到这样一种场景，就是我们在开发过程中的不同阶段要给测试提供一个版本的代码，这个版本可能需要维护一段事件，主干也会同步开发新的功能。项目周期很长的话就会产生很多分支代，而且有的分支代码随着产品的迭代合并早已不再维护或许已在远端删除，但是这些分支快照仍然在你的本地仓库中存在。如果在产生一个新的需要维护的分支，当从远端拉下代码后，在一大堆分支列表里找到要维护的分支名">
+<meta name="twitter:image" content="https://warriorsworld.github.io/2018/05/29/git如何删除无用分支/branhImage.png">
+  
+    <link rel="alternate" href="../../../../atom.xml" title="warriorsworld&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="../../../../index.html" id="logo">warriorsworld&#39;s blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="../../../../index.html" id="subtitle">我也来做一个网络资源贡献者</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="../../../../index.html">首页</a>
+        
+          <a class="main-nav-link" href="../../../../archives">文章列表</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="../../../../atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://warriorsworld.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-git如何删除无用分支" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="" class="article-date">
+  <time datetime="2018-05-29T07:32:38.000Z" itemprop="datePublished">2018-05-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="../../../../categories/CVS/">版本控制</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <h1 class="article-title" itemprop="name">
+      git如何删除无用分支
+      <span style="display: block;float: right;font-size: 12px;color: #666" id="busuanzi_container_page_pv">
+        本文总阅读<span id="busuanzi_value_page_pv">0</span>次
+      </span>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>我们在协同迭代开发的过程中经常会碰到这样一种场景，就是我们在开发过程中的不同阶段要给测试提供一个版本的代码，这个版本可能需要维护一段事件，主干也会同步开发新的功能。项目周期很长的话就会产生很多分支代，而且有的分支代码随着产品的迭代合并早已不再维护或许已在远端删除，但是这些分支快照仍然在你的本地仓库中存在。如果在产生一个新的需要维护的分支，当从远端拉下代码后，在一大堆分支列表里找到要维护的分支名称有时都有点费事。所以我们来说一说如何保持我们本地仓库分支的整洁。</p>
+<h3 id="这个场景下使用到的命令只有三个"><a href="#这个场景下使用到的命令只有三个" class="headerlink" title="这个场景下使用到的命令只有三个"></a>这个场景下使用到的命令只有三个</h3><ol>
+<li><a href="#cmd_1"><code>git branch [-a|-r]</code></a></li>
+<li><a href="#cmd_2"><code>git remote show origin</code></a></li>
+<li><a href="#cmd_3"><code>git remote prune origin</code></a></li>
+</ol>
+<a id="more"></a>
+<h3 id="使用git-branch-a-r-命令来查看所有或者远程分支"><a href="#使用git-branch-a-r-命令来查看所有或者远程分支" class="headerlink" title="使用git branch [-a|-r]命令来查看所有或者远程分支"></a>使用<code id="cmd_1">git branch [-a|-r]</code>命令来查看所有或者远程分支</h3><p><code> git branch -a </code>命令可以查看所有的分支列表，包括本地和远端的；<code> git branch -r </code>命令可以查看所有远程的分支列表，不带参数只会返回本地的分支。这里为了演示，我在本地创建了一个分支<code> aaa </code>,然后<code> push </code>到远端。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">E:\WeHealth&gt;git branch -a</span><br><span class="line">* aaa</span><br><span class="line">  master</span><br><span class="line">  remotes/origin/HEAD -&gt; origin/master</span><br><span class="line">  remotes/origin/aaa</span><br><span class="line">  remotes/origin/master</span><br></pre></td></tr></table></figure>
+<p>这时我们打开github该项目的页面，可以看到该分支已经同步到远端了。这时候我们为了演示该场景的需要，在页面上删除该分支。</p>
+<p><img src="/2018/05/29/git如何删除无用分支/branhImage.png" alt="远程仓库分支"></p>
+<p>然后再执行<code> git branch -a </code>命令发现该分支还存在。因为你紧紧只是在远程删除了该分支，本地仍然存储了这个分支的快照，我们必须通过手动来删除这个分支。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">E:\WeHealth&gt;git branch -a</span><br><span class="line">* aaa</span><br><span class="line">  master</span><br><span class="line">  remotes/origin/HEAD -&gt; origin/master</span><br><span class="line">  remotes/origin/aaa</span><br><span class="line">  remotes/origin/master</span><br></pre></td></tr></table></figure>
+<h3 id="使用-git-remote-show-origin-可以查看remote地址，远程分支，还有本地分支与之相对应关系等信息"><a href="#使用-git-remote-show-origin-可以查看remote地址，远程分支，还有本地分支与之相对应关系等信息" class="headerlink" title="使用 git remote show origin 可以查看remote地址，远程分支，还有本地分支与之相对应关系等信息"></a>使用<code id="cmd_2"> git remote show origin </code>可以查看remote地址，远程分支，还有本地分支与之相对应关系等信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">E:\WeHealth&gt;git remote show origin</span><br><span class="line">* remote origin</span><br><span class="line">  Fetch URL: https://github.com/warriorsworld/WeHealth.git</span><br><span class="line">  Push  URL: https://github.com/warriorsworld/WeHealth.git</span><br><span class="line">  HEAD branch: master</span><br><span class="line">  Remote branches:</span><br><span class="line">    master                  tracked</span><br><span class="line">    refs/remotes/origin/aaa stale (use <span class="string">'git remote prune'</span> to remove)</span><br><span class="line">  Local branch configured <span class="keyword">for</span> <span class="string">'git pull'</span>:</span><br><span class="line">    master merges with remote master</span><br><span class="line">  Local ref configured <span class="keyword">for</span> <span class="string">'git push'</span>:</span><br><span class="line">    master pushes to master (up to date)</span><br></pre></td></tr></table></figure>
+<p>这是我们可以看到，刚才在远端删除的aaa分支后面出现了一行提示(use <code> git remote prune </code> to remove)。</p>
+<h3 id="使用git-remote-prune删除那些远程仓库中已经不存在的分支"><a href="#使用git-remote-prune删除那些远程仓库中已经不存在的分支" class="headerlink" title="使用git remote prune删除那些远程仓库中已经不存在的分支"></a>使用<code id="cmd_3">git remote prune</code>删除那些远程仓库中已经不存在的分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">E:\WeHealth&gt;git remote prune origin</span><br><span class="line">Pruning origin</span><br><span class="line">URL: https://github.com/warriorsworld/WeHealth.git</span><br><span class="line"> * [pruned] origin/aaa</span><br></pre></td></tr></table></figure>
+<p><code> git remote prune </code> 命令必须指定要删除对应远端仓库的名称，这里是origin。这时再去执行<code> git branch -a </code>，分支列表中仓库中记录的远程的<code> remotes/origin/aaa </code>分支肯定是不存在了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">E:\WeHealth&gt;git branch -a</span><br><span class="line">* aaa</span><br><span class="line">  master</span><br><span class="line">  remotes/origin/HEAD -&gt; origin/master</span><br><span class="line">  remotes/origin/master</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://warriorsworld.github.io/2018/05/29/git如何删除无用分支/" data-id="cjiflpvj40001rojxn4dzn989" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../../tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="../../../06/14/使用jenkins实现github接收提交后在远程服务器部署流程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用jenkins实现github接收提交后在远程服务器部署流程
+        
+      </div>
+    </a>
+  
+  
+    <a href="../../22/git-diff/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">如何使用git diff命令查看差异</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  
+  <div id="gitComment"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    const gitment = new Gitment({
+        id: 'gitComment',
+        owner: 'warriorsworld',
+        repo: 'warriorsworld.github.io',
+        oauth: {
+            client_id: '9f157940865f0970c340',
+            client_secret: 'b08e4c0c7392b9cf5f0e42de63776814eb0b91ce',
+        }
+    });
+    gitment.render('gitComment')
+</script>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="../../../../categories/CI/">持续集成</a></li><li class="category-list-item"><a class="category-list-link" href="../../../../categories/CVS/">版本控制</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="../../../../tags/jenkins/">jenkins</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="../../../../tags/git/" style="font-size: 20px;">git</a> <a href="../../../../tags/github/" style="font-size: 10px;">github</a> <a href="../../../../tags/jenkins/" style="font-size: 10px;">jenkins</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="../../../../archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="../../../06/14/使用jenkins实现github接收提交后在远程服务器部署流程/">使用jenkins实现github接收提交后在远程服务器部署流程</a>
+          </li>
+        
+          <li>
+            <a href="">git如何删除无用分支</a>
+          </li>
+        
+          <li>
+            <a href="../../22/git-diff/">如何使用git diff命令查看差异</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div style="text-align: center" id="footer-info" class="inner">
+      &copy; 2018 warriorsworld |
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> |
+      本站访客数<span id="busuanzi_value_site_uv"></span>人次
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="../../../../index.html" class="mobile-nav-link">首页</a>
+  
+    <a href="../../../../archives" class="mobile-nav-link">文章列表</a>
+  
+</nav>
+    
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" href="../../../../fancybox/jquery.fancybox.css">
+  <script src="../../../../fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
